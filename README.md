@@ -1,10 +1,56 @@
-# RiskLab — runnable QARM II project
+# RiskLab — Quantitative Asset & Risk Management II
 
-**Updated 26 November 2026 — client dashboard edition.** Seven ETFs, six portfolio strategies, a quarterly backtest, raw and cleaned input exports, solver diagnostics, a readable offline report, and the four-tab Streamlit application in the supplied blueprint.
+**Updated 27 November 2026 — final deployed client dashboard edition.**
+
+RiskLab is a multi-asset portfolio management and risk-budgeting application developed for the Quantitative Asset & Risk Management II (QARM II) course at HEC Lausanne, University of Lausanne.
+
+The project includes seven ETFs, six portfolio strategies, quarterly historical backtesting, constrained risk-budgeting optimization, covariance shrinkage, robustness analysis, raw and cleaned input exports, solver diagnostics, a readable offline report, and an interactive four-tab Streamlit application.
+
+## Live application
+
+**[Launch RiskLab](https://risklab-unil.streamlit.app/)**
+
+RiskLab is deployed on Streamlit Community Cloud using Python 3.12. The application includes the historical ETF dataset and is ready to use without local installation or manual data uploads. The online dashboard has been tested against the local historical backtest and reproduces the displayed baseline financial results.
+
+The application provides four interactive sections:
+
+1. **Client mandate** — investment objectives, investment universe, portfolio constraints and historical data coverage.
+2. **Portfolio optimizer** — target portfolio allocations, estimated risk contributions and constraint diagnostics.
+3. **Risk analytics** — historical risk-budget deviations, diversification analysis, drawdowns and stress-period comparisons.
+4. **Backtest & benchmarks** — historical performance, benchmark comparisons, portfolio holdings and reproducible result exports.
+
+Access to the application and repository is restricted to authorized users.
+
+## Historical dataset
+
+The repository includes the historical dataset used to produce the project results in `data/etf_prices.csv`.
+
+| Property | Description |
+|---|---|
+| Source | Yahoo Finance via yfinance |
+| Assets | SPY, VGK, EEM, IEF, LQD, GLD, DBC |
+| Price frequency | Daily |
+| Price adjustment | Dividend- and split-adjusted closing prices |
+| Currency | USD |
+| First common price observation | 6 February 2006 |
+| Last price observation | 30 October 2026 |
+| Common price observations | 5,217 |
+| Baseline estimation window | 504 trading days |
+| Robustness estimation window | 252 trading days |
+
+The dataset is kept fixed to ensure reproducibility of the empirical results. Historical prices have undergone structural validation and external spot-checks. These checks provide supporting evidence of data quality but do not constitute independent authentication of every observation.
+
+The external data verification record is available in [validation/RiskLab_Data_Verification.md](validation/RiskLab_Data_Verification.md).
+
+The dataset is provided for authorized academic use within the project. No broader market-data redistribution permission is implied.
 
 ## Run the project
 
-This is the code-only repository edition. Historical market prices, provider archives, generated outputs and supplied course materials are deliberately excluded. Use your own authorized adjusted-price CSV or, where permitted by provider terms, run the optional downloader. The separately retained local team snapshot is identified in the data spot-check audit. No market-data redistribution permission is implied.
+The repository contains the Python source code, historical ETF dataset, application, documentation, automated tests and validation records required to reproduce the project locally.
+
+Provider archives, generated backtest outputs, virtual environments and supplied course materials are deliberately excluded.
+
+Python **3.12 is recommended** for compatibility with the pinned project dependencies.
 
 On Windows, use Python 3.12 (recommended), then double-click `SETUP_WINDOWS.bat` once. After setup, double-click `START_ANALYSIS.bat` or `START_APP.bat`. Alternatively, open PowerShell in this folder and create your new environment once:
 
@@ -23,7 +69,7 @@ python run.py
 python run.py --app
 ```
 
-`python run.py` reuses `data/etf_prices.csv` if present; otherwise it downloads adjusted ETF prices from Yahoo Finance. It validates the input and runs all six strategies twice (504 and 252 observations), saving `outputs_real_504/` and `outputs_real_252/`. The requested dates are fixed at 2005-01-01 through 2026-10-31 (exclusive endpoint 2026-11-01); common available history starts later. The existing CSV is not refreshed automatically. `--open` opens the baseline report after both runs finish. An explicitly requested `--refresh-data` attempts a new download for the fixed period and preserves the previous snapshot on successful replacement. Provider failure or invalid data stops the analysis; no artificial prices are generated or substituted.
+`python run.py` reuses `data/etf_prices.csv` if present; otherwise it downloads adjusted ETF prices from Yahoo Finance, subject to applicable provider terms. It validates the input and runs all six strategies twice (504 and 252 observations), saving `outputs_real_504/` and `outputs_real_252/`. The requested dates are fixed at 2005-01-01 through 2026-10-31 (exclusive endpoint 2026-11-01); common available history starts later. The existing CSV is not refreshed automatically. `--open` opens the baseline report after both runs finish. An explicitly requested `--refresh-data` attempts a new download for the fixed period and preserves the previous snapshot on successful replacement. Provider failure or invalid data stops the analysis; no artificial prices are generated or substituted.
 
 The app uses that same saved CSV and the 504-day default, and independently recalculates when settings change. It does not download data on page load. If the saved file is missing, run the analysis first or upload a suitable CSV in the sidebar. The four tabs now include client mandate summary, grouped capital/risk bars, historical risk-budget comparison, percentage drawdowns, annual stress comparisons, dynamic performance cards and stacked holdings. Raw data and technical diagnostics remain available in expandable sections. `python -m streamlit run app.py` is equivalent to launching via `--app`.
 
@@ -37,7 +83,7 @@ python run.py --input data/etf_prices.csv --window 504 --output outputs_my_data
 
 Required columns: `Date,SPY,VGK,EEM,IEF,LQD,GLD,DBC`. Supply USD dividend- and split-adjusted closing prices and enough common history. An explicit input never triggers a replacement download. A custom `--output` requires a single `--window`; omit both to run the configured pair. Both CLI and app use the defaults in `risklab/config.py`.
 
-Results remain **USER-SUPPLIED — NOT INDEPENDENTLY VERIFIED**. Matching source-archive bytes allow provider attribution but do not authenticate prices. The retired demo is no longer supported, and exact copies of it are rejected. See [REAL_DATA_README.md](REAL_DATA_README.md).
+Results calculated from user-supplied files remain **USER-SUPPLIED — NOT INDEPENDENTLY VERIFIED**. Matching source-archive bytes allow provider attribution but do not authenticate prices. The retired demo is no longer supported, and exact copies of it are rejected. See [REAL_DATA_README.md](REAL_DATA_README.md).
 
 ## What a run saves
 
@@ -97,9 +143,57 @@ The test runner is part of Python. Checks include course identities, solver-fail
 | `risklab/data.py` | Cached historical input, provider archive and validation |
 | `risklab/export.py` | Complete run exports and local HTML/SVG report |
 | `app.py` | Four-tab client interface; imports the shared calculations |
+| `data/` | Fixed historical ETF price dataset |
 | `tests/` | Standard-library regression checks |
 | `validation/` | Historical data spot-check and prior local validation records |
+| `docs/` | Mathematical methodology, implementation walkthrough and change history |
+| `requirements.txt` | Project Python dependencies |
+| `.streamlit/` | Streamlit application appearance and configuration |
 
 ## Cloud deployment
 
-Deploy `app.py` from the repository root using Streamlit Community Cloud with Python 3.12. The app defaults to CSV upload when no saved dataset is present. Supply only data you are authorized to use and share; a default hosted dataset is not included. The cloud deployment itself has not yet been tested.
+The application is successfully deployed on Streamlit Community Cloud.
+
+**Live application:** [risklab-unil.streamlit.app](https://risklab-unil.streamlit.app/)
+
+**Source repository:** [github.com/sye3124/RiskLab](https://github.com/sye3124/RiskLab)
+
+### Deployment configuration
+
+| Parameter | Value |
+|---|---|
+| Hosting platform | Streamlit Community Cloud |
+| GitHub repository | `sye3124/RiskLab` |
+| Branch | `main` |
+| Main application file | `app.py` |
+| Python version | 3.12 |
+| Dependencies | `requirements.txt` |
+| Historical dataset | `data/etf_prices.csv` |
+
+Python 3.12 should be selected explicitly in the advanced deployment settings to maintain compatibility with the validated project dependencies.
+
+The deployed application automatically loads the included historical dataset. If no saved dataset is present, the application defaults to CSV upload.
+
+The application does not require a live market-data connection during normal operation.
+
+The cloud dashboard has been visually checked across all four tabs, and its displayed baseline financial results have been compared with the local backtest. Automatic loading of the hosted historical dataset has also been tested successfully.
+
+Supply and share only data you are authorized to use.
+
+## Scope and limitations
+
+RiskLab is an academic portfolio management and quantitative risk analysis project.
+
+Historical backtest results are conditional on the selected investment universe, historical sample, covariance estimator, optimization objectives, estimation windows, transaction-cost assumptions and portfolio constraints.
+
+Historical performance does not guarantee future performance. Estimated risk contributions do not guarantee equal subsequently realized risk contributions.
+
+The application is intended for educational purposes and investment strategy analysis, not live trading or personalized investment advice.
+
+---
+
+**RiskLab — QARM II**
+
+Quantitative Asset & Risk Management II  
+HEC Lausanne — University of Lausanne  
+2026
