@@ -1,0 +1,12 @@
+RiskLab client dashboard edition — 26 November 2026
+
+48/48 unittest tests passed using NumPy 2.3.5, pandas 2.2.3 and SciPy 1.17.0.
+Five new tests: grouped signed risk shares; actual stacked holdings (cash not normalized); Windows/Unix provenance path sanitization; changed benchmark/window/cap control flow; infeasible caps error control flow.
+Both default historical backtests completed successfully from the assembled project.
+Compared metrics, daily returns, target weights, risk tracking and next-period attribution against prior results: match within rtol=1e-8, atol=1e-10.
+Original core.py, portfolio.py, config.py, historical CSV and provider response match prior ZIP byte-for-byte.
+Both regenerated reports: artifact SHA-256 and source-code SHA-256 entries checked against actual files.
+Archive directory in successful exported provenance is a folder name, not a machine-specific absolute path.
+Windows test reads use explicit UTF-8.
+Streamlit and Vega-Lite rendering not executed: Streamlit unavailable in this environment, and pip could not install it. UI tests use mocked Streamlit control flow, not a browser. Windows setup and actual browser interactions require local acceptance testing.
+Market data included in the original local package only; no public redistribution permission or deployment established. No synthetic market-data fallback.
