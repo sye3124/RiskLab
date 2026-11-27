@@ -19,7 +19,7 @@ The application provides four interactive sections:
 3. **Risk analytics** — historical risk-budget deviations, diversification analysis, drawdowns and stress-period comparisons.
 4. **Backtest & benchmarks** — historical performance, benchmark comparisons, portfolio holdings and reproducible result exports.
 
-Access to the application and repository is restricted to authorized users.
+The application and source code repository are publicly accessible. No account or invitation is required to explore the project.
 
 ## Historical dataset
 
